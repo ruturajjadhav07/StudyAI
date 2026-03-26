@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircle, XCircle, Trophy, RotateCcw, Home } from 'lucide-react';
+import { CheckCircle, XCircle, RotateCcw, LayoutDashboard, Info } from 'lucide-react';
 
 export default function Results() {
   const { state } = useLocation();
@@ -8,121 +8,94 @@ export default function Results() {
   const result = state?.result;
 
   if (!result) return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="text-center">
-        <p className="text-slate-600 mb-4">No results found.</p>
-        <button onClick={() => navigate('/dashboard')}
-          className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold">
-          Go to Dashboard
-        </button>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-950">
+      <button onClick={() => navigate('/dashboard')} className="text-indigo-600 font-medium hover:underline">
+        Return to Dashboard
+      </button>
     </div>
   );
 
   const { score, total, percentage, grade, results } = result;
 
-  const gradeColor =
-    grade === 'A+' || grade === 'A' ? 'text-green-500'
-      : grade === 'B' ? 'text-blue-500'
-        : grade === 'C' ? 'text-amber-500'
-          : grade === 'D' ? 'text-orange-500'
-            : 'text-red-500';
-
-  const progressColor =
-    grade === 'A+' || grade === 'A' ? 'bg-green-500'
-      : grade === 'B' ? 'bg-blue-500'
-        : grade === 'C' ? 'bg-amber-500'
-          : grade === 'D' ? 'bg-orange-500'
-            : 'bg-red-500';
+  const statusColor = percentage >= 70 ? 'emerald' : percentage >= 40 ? 'amber' : 'rose';
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 px-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-6 px-4 transition-colors duration-300">
       <div className="max-w-2xl mx-auto">
-        {/* Score Card */}
-        <div className="bg-white rounded-2xl p-10 shadow-sm border border-slate-100 text-center mb-8">
-          <Trophy className="text-amber-400 mx-auto mb-4" size={52} />
-          <h1 className="text-3xl font-extrabold text-slate-800 mb-8">Quiz Complete!</h1>
 
-          <div className="flex justify-center gap-16 mb-8">
-            <div className="flex flex-col items-center gap-1">
-              <span className={`text-5xl font-black ${gradeColor}`}>{grade}</span>
-              <span className="text-sm text-slate-400 font-medium">Grade</span>
+        {/* Header Score */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 mb-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-5">
+            <div className={`w-16 h-16 rounded-xl flex items-center justify-center bg-${statusColor}-50 dark:bg-${statusColor}-500/10 border border-${statusColor}-100 dark:border-${statusColor}-500/20`}>
+              <span className={`text-3xl font-black text-${statusColor}-600 dark:text-${statusColor}-400`}>{grade}</span>
             </div>
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-4xl font-extrabold text-slate-800">
-                {score}/{total}
-              </span>
-              <span className="text-sm text-slate-400 font-medium">Score</span>
-            </div>
-            <div className="flex flex-col items-center gap-1">
-              <span className={`text-4xl font-extrabold ${gradeColor}`}>
-                {percentage?.toFixed(1)}%
-              </span>
-              <span className="text-sm text-slate-400 font-medium">Percentage</span>
+            <div>
+              <h1 className="text-xl font-bold text-slate-900 dark:text-white">Quiz Results</h1>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                You scored <span className="font-bold text-slate-700 dark:text-slate-200">{score} out of {total}</span> ({Math.round(percentage)}%)
+              </p>
             </div>
           </div>
 
-          <div className="h-3 bg-slate-100 rounded-full overflow-hidden mb-8">
-            <div className={`h-3 rounded-full transition-all ${progressColor}`}
-              style={{ width: `${percentage}%` }} />
-          </div>
-
-          <div className="flex justify-center gap-3">
+          <div className="flex gap-2">
             <button onClick={() => navigate(-1)}
-              className="flex items-center gap-2 px-6 py-3 border border-indigo-500 text-indigo-600 font-semibold rounded-xl hover:bg-indigo-50 transition">
-              <RotateCcw size={16} /> Retake
+              className="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" title="Retake">
+              <RotateCcw size={20} />
             </button>
             <button onClick={() => navigate('/dashboard')}
-              className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition">
-              <Home size={16} /> Dashboard
+              className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg transition-all">
+              <LayoutDashboard size={18} /> Dashboard
             </button>
           </div>
         </div>
 
-        {/* Detailed Results */}
-        <h2 className="text-xl font-bold text-slate-800 mb-4">Detailed Review</h2>
+        {/* Review List */}
         <div className="space-y-3">
-          {results.map((r, i) => (
-            <div key={r.questionId}
-              className={`bg-white rounded-xl p-5 border-l-4 shadow-sm ${r.isCorrect ? 'border-green-500' : 'border-red-500'
-                }`}>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="bg-slate-100 text-slate-500 font-bold text-xs px-2.5 py-1 rounded-full">
-                  Q{i + 1}
-                </span>
-                {r.isCorrect
-                  ? <CheckCircle className="text-green-500" size={18} />
-                  : <XCircle className="text-red-500" size={18} />}
-                <span className={`font-semibold text-sm ${r.isCorrect ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                  {r.isCorrect ? 'Correct' : 'Incorrect'}
-                </span>
-              </div>
-              <p className="text-slate-800 font-medium text-sm leading-relaxed mb-3">
-                {r.questionText}
-              </p>
-              <div className="flex flex-wrap gap-2 mb-3">
-                {r.selectedOption && (
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${r.isCorrect
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-red-100 text-red-700'
-                    }`}>
-                    Your answer: {r.selectedOption}
-                  </span>
-                )}
-                {!r.isCorrect && (
-                  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                    Correct: {r.correctOption}
-                  </span>
-                )}
-              </div>
-              {r.explanation && (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800 leading-relaxed">
-                  <strong>💡 Explanation: </strong>{r.explanation}
+          {results.map((r, i) => {
+            const isCorrect = r.selectedOption?.toString().trim().toLowerCase() === r.correctOption?.toString().trim().toLowerCase();
+
+            return (
+              <div key={r.questionId || i} className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-200 dark:border-slate-800">
+                <div className="flex gap-3">
+                  <div className="mt-0.5">
+                    {isCorrect
+                      ? <CheckCircle size={18} className="text-emerald-500" />
+                      : <XCircle size={18} className="text-rose-500" />}
+                  </div>
+
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3 leading-snug">
+                      {r.questionText}
+                    </p>
+
+                    <div className="flex flex-wrap gap-x-4 gap-y-2 mb-3">
+                      <div className="text-xs">
+                        <span className="text-slate-400 mr-1 uppercase font-bold tracking-tighter">Your Answer:</span>
+                        <span className={`font-bold ${!r.selectedOption ? 'text-slate-400 italic' : isCorrect ? 'text-emerald-600' : 'text-rose-600'}`}>
+                          {r.selectedOption || 'Skipped'}
+                        </span>
+                      </div>
+                      {!isCorrect && (
+                        <div className="text-xs">
+                          <span className="text-slate-400 mr-1 uppercase font-bold tracking-tighter">Correct:</span>
+                          <span className="font-bold text-emerald-600">{r.correctOption}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {r.explanation && (
+                      <div className="pl-3 border-l-2 border-slate-100 dark:border-slate-800 py-1">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 italic">
+                          <span className="font-bold not-italic text-slate-400 mr-1">Note:</span>
+                          {r.explanation}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

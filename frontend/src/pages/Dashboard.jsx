@@ -49,7 +49,6 @@ export default function Dashboard() {
   };
 
   return (
-    /* FIX: We inject the 'dark' class here as well to ensure the wrapper respects the theme immediately */
     <div className={`min-h-screen flex transition-colors duration-300 ${theme === 'dark' ? 'dark bg-slate-950' : 'bg-[#f8fafc]'}`}>
 
       {/* Sidebar */}

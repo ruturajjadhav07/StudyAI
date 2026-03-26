@@ -40,22 +40,28 @@ export default function Quiz() {
     };
     load();
   }, [id]);
-
   const handleSubmit = useCallback(async () => {
     if (submitting) return;
     setSubmitting(true);
+
     try {
-      const res = await submitQuiz({ materialId: parseInt(id), answers });
+      const finalAnswers = {};
+      questions.forEach(q => {
+        finalAnswers[q.id] = answers[q.id] || null;
+      });
 
-      // Clear the timer from storage upon successful completion
+      const res = await submitQuiz({
+        materialId: parseInt(id),
+        answers: finalAnswers
+      });
+
       localStorage.removeItem(`quiz_timer_${id}`);
-
       navigate('/results', { state: { result: res.data.data } });
     } catch {
       toast.error('Submission failed');
       setSubmitting(false);
     }
-  }, [answers, id, navigate, submitting]);
+  }, [answers, id, navigate, submitting, questions]);
 
   useEffect(() => {
     if (timeLeft <= 0 || loading) return;
@@ -120,8 +126,8 @@ export default function Quiz() {
             </span>
           </div>
           <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl font-bold text-base transition-colors ${isLowTime
-              ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+            ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
+            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
             }`}>
             <Clock size={16} /> {formatTime(timeLeft)}
           </div>
@@ -153,8 +159,8 @@ export default function Quiz() {
             </span>
             {q.difficulty && (
               <span className={`px-3 py-1 rounded-full text-xs font-bold ${q.difficulty === 'EASY' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                  : q.difficulty === 'MEDIUM' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
-                    : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                : q.difficulty === 'MEDIUM' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                  : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
                 }`}>
                 {q.difficulty}
               </span>
@@ -166,8 +172,8 @@ export default function Quiz() {
                 return n;
               })}
               className={`ml-auto p-1.5 rounded-lg transition ${flagged.has(q.id)
-                  ? 'text-amber-500 bg-amber-50 dark:bg-amber-900/20'
-                  : 'text-slate-300 dark:text-slate-600 hover:text-slate-500 dark:hover:text-slate-400'
+                ? 'text-amber-500 bg-amber-50 dark:bg-amber-900/20'
+                : 'text-slate-300 dark:text-slate-600 hover:text-slate-500 dark:hover:text-slate-400'
                 }`}
             >
               <Flag size={18} />
@@ -186,13 +192,13 @@ export default function Quiz() {
                   key={opt}
                   onClick={() => setAnswers(prev => ({ ...prev, [q.id]: opt }))}
                   className={`w-full flex items-center gap-4 p-4 rounded-xl border text-left transition-all ${selected
-                      ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
-                      : 'border-slate-200 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                    ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
+                    : 'border-slate-200 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-800 hover:bg-slate-50 dark:hover:bg-slate-800'
                     }`}
                 >
                   <span className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 transition-colors ${selected
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                     }`}>
                     {opt}
                   </span>
@@ -241,12 +247,12 @@ export default function Quiz() {
                 key={question.id}
                 onClick={() => setCurrent(idx)}
                 className={`w-8 h-8 rounded-lg text-xs font-bold border transition-all ${idx === current
-                    ? 'bg-indigo-600 text-white border-indigo-600'
-                    : flagged.has(question.id)
-                      ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-300 dark:border-amber-700'
-                      : answers[question.id]
-                        ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-300 dark:border-green-700'
-                        : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-500 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
+                  ? 'bg-indigo-600 text-white border-indigo-600'
+                  : flagged.has(question.id)
+                    ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-300 dark:border-amber-700'
+                    : answers[question.id]
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-300 dark:border-green-700'
+                      : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-500 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
                   }`}
               >
                 {idx + 1}
