@@ -1,6 +1,6 @@
 # StudyAI ✨
 
-**StudyAI** is a full-stack AI-powered learning platform designed to help students and professionals turn dense study materials into actionable knowledge. By leveraging **Spring Boot** and **React**, the platform provides a seamless experience for uploading notes and instantly generating summaries and practice quizzes.
+**StudyAI** is a AI-powered learning platform designed to help students and professionals turn dense study materials into actionable knowledge. By leveraging **Spring Boot** and **React**, the platform provides a seamless experience for uploading notes and instantly generating summaries and practice quizzes.
 
 ---
 
@@ -59,7 +59,7 @@ cd frontend
 npm install
 npm run dev
 ```
-> The app will be available at **http://localhost:5173**
+> The app will be available at **http://localhost:3000**
 
 ---
 
@@ -91,11 +91,8 @@ Contributions are what make the open-source community such an amazing place to l
 
 ---
 
-## 📝 License
-Distributed under the **MIT License**. See `LICENSE` for more information.
-
 ## ✉️ Let's Connect!
-Got a question, a suggestion, or just want to talk about AI and tech? Drop me a message—I'm always up for a good conversation!
+Got a question, a suggestion, or just want to talk about AI and tech? Drop me a message!
 
 [Linkedin](https://www.linkedin.com/in/ruturaj-jadhav-0a250821b/) | [Instagram](https://instagram.com/ruturajj_07)
 
