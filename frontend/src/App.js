@@ -12,6 +12,8 @@ import Upload from './pages/Upload';
 import Study from './pages/Study';
 import Quiz from './pages/Quiz';
 import Results from './pages/Results';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 // Route guard
 
@@ -45,6 +47,8 @@ function App() {
           <Route path="/study/:id" element={<PrivateRoute><Study /></PrivateRoute>} />
           <Route path="/quiz/:id" element={<PrivateRoute><Quiz /></PrivateRoute>} />
           <Route path="/results" element={<PrivateRoute><Results /></PrivateRoute>} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

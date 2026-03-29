@@ -10,8 +10,11 @@ import com.backend.quize.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -69,5 +72,41 @@ public class AuthService {
                 .email(userDetails.getEmail())
                 .userId(userDetails.getId())
                 .build();
+    }
+
+    public void sendResetOtp(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        // Generate 6-digit OTP
+        String otp = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 1000000));
+
+        // Expiry 5 minutes from generated time
+        long expiry = System.currentTimeMillis() + (5 * 60 * 1000);
+
+        user.setResetOtp(otp);
+        user.setResetOtpExpireAt(expiry);
+        userRepository.save(user);
+
+        emailService.sendResetOtp(user.getEmail(), otp);
+    }
+
+    public void resetPassword(String email, String otp, String newPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (user.getResetOtp() == null || !user.getResetOtp().equals(otp)) {
+            throw new RuntimeException("Invalid OTP");
+        }
+
+        if (user.getResetOtpExpireAt() < System.currentTimeMillis()) {
+            throw new RuntimeException("OTP has expired");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        user.setResetOtp(null);
+        user.setResetOtpExpireAt(0L);
+        userRepository.save(user);
     }
 }

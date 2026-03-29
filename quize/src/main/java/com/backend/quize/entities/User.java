@@ -50,4 +50,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<StudyMaterial> studyMaterials;
 
+    private String resetOtp;
+    private Long resetOtpExpireAt;
 }

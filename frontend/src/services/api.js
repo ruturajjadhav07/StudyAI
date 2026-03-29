@@ -48,3 +48,7 @@ export const generateFlashcards = (id) =>
 // Quiz
 export const getQuiz = (materialId) => API.get(`/quiz/${materialId}`);
 export const submitQuiz = (data) => API.post("/quiz/submit", data);
+
+// Password Reset
+export const forgotPassword = (data) => API.post('/auth/forgot-password', data);
+export const resetPassword = (data) => API.post('/auth/reset-password', data);
