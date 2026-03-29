@@ -19,7 +19,7 @@ import ResetPassword from './pages/ResetPassword';
 
 const PrivateRoute = ({ children }) => {
   const { user } = useAuth();
-  return user ? children : <Navigate to="/login" replace />;
+  return user ? children : <Navigate to="/" replace />;
 };
 
 const PublicRoute = ({ children }) => {
@@ -29,7 +29,7 @@ const PublicRoute = ({ children }) => {
 
 const HomeRoute = () => {
   const { user } = useAuth();
-  return user ? <Navigate to="/dashboard" replace /> : <Landing />;
+  return (user && user.token) ? <Navigate to="/dashboard" replace /> : <Landing />;
 };
 
 // App

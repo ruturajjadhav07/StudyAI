@@ -38,6 +38,7 @@ export default function Dashboard() {
 
   const handleLogout = () => {
     logoutUser();
+    toast.success('Logged out successfully');
     navigate('/', { replace: true });
   };
 
