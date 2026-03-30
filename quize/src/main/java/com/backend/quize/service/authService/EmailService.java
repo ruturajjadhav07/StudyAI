@@ -2,6 +2,7 @@ package com.backend.quize.service.authService;
 
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailService {
 
+    @Value("${app.mail.from}")
+    private String fromEmail;
+
     private final JavaMailSender javaMailSender;
 
     @Async
@@ -20,7 +24,7 @@ public class EmailService {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom("StudyAI Team <ruturajjadhav122@gmail.com>");
+            helper.setFrom("StudyAI Team <" + fromEmail + ">");
             helper.setTo(toEmail);
             helper.setSubject("Welcome to StudyAI – Let's Start Learning! 🚀");
 
@@ -63,20 +67,20 @@ public class EmailService {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom("StudyAI Security <ruturajjadhav122@gmail.com>");
+            helper.setFrom("StudyAI Team <" + fromEmail + ">");
             helper.setTo(toEmail);
             helper.setSubject(otp + " is your StudyAI Reset Code");
 
             String htmlContent = """
-            <div style="font-family: Arial, sans-serif; text-align: caenter; padding: 20px; border: 1px solid #ddd; border-radius: 10px; max-width: 500px; margin: auto;">
-                <h2 style="color: #4A90E2;">Password Reset Request</h2>
-                <p>Use the code below to reset your password. This code expires in 5 minutes.</p>
-                <div style="background: #f4f7f9; padding: 20px; font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #333; border-radius: 5px; margin: 20px 0;">
-                    %s
-                </div>
-                <p style="font-size: 12px; color: #777;">If you didn't request this, you can ignore this email.</p>
-            </div>
-            """.formatted(otp);
+                    <div style="font-family: Arial, sans-serif; text-align: caenter; padding: 20px; border: 1px solid #ddd; border-radius: 10px; max-width: 500px; margin: auto;">
+                        <h2 style="color: #4A90E2;">Password Reset Request</h2>
+                        <p>Use the code below to reset your password. This code expires in 5 minutes.</p>
+                        <div style="background: #f4f7f9; padding: 20px; font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #333; border-radius: 5px; margin: 20px 0;">
+                            %s
+                        </div>
+                        <p style="font-size: 12px; color: #777;">If you didn't request this, you can ignore this email.</p>
+                    </div>
+                    """.formatted(otp);
 
             helper.setText(htmlContent, true);
             javaMailSender.send(message);
