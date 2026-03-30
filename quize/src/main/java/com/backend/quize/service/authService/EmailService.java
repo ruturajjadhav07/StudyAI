@@ -74,7 +74,7 @@ public class EmailService {
                     </div>
                     """.formatted(otp);
 
-            sendBrevoEmail(toEmail, otp + " is your StudyAI Reset Code", htmlContent);
+            sendBrevoEmail(toEmail, "Your StudyAI Password Reset Code", htmlContent);
 
         } catch (Exception e) {
             System.err.println("Failed to send OTP email: " + e.getMessage());
