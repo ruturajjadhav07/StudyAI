@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:8080/api" });
+
+const API = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8080'
+});
 
 // Attach JWT token to every request
 API.interceptors.request.use(
@@ -19,36 +22,36 @@ API.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.clear();
-      window.location.href = "/login";
+      window.location.href = "/api/login";
     }
     return Promise.reject(error);
   },
 );
 
 // Auth
-export const register = (data) => API.post("/auth/register", data);
-export const login = (data) => API.post("/auth/login", data);
+export const register = (data) => API.post("/api/auth/register", data);
+export const login = (data) => API.post("/api/auth/login", data);
 
 // Material
-export const uploadText = (data) => API.post("/material/text", data);
-export const uploadPdf = (formData) => API.post("/material/pdf", formData);
-export const getMyMaterials = () => API.get("/material/my");
-export const getMaterial = (id) => API.get(`/material/${id}`);
+export const uploadText = (data) => API.post("/api/material/text", data);
+export const uploadPdf = (formData) => API.post("/api/material/pdf", formData);
+export const getMyMaterials = () => API.get("/api/material/my");
+export const getMaterial = (id) => API.get(`/api/material/${id}`);
 
 // AI
-export const getStudyData = (id) => API.get(`/ai/study-data/${id}`);
-export const generateSummary = (id) => API.post(`/ai/summarize/${id}`);
+export const getStudyData = (id) => API.get(`/api/ai/study-data/${id}`);
+export const generateSummary = (id) => API.post(`/api/ai/summarize/${id}`);
 export const generateMCQ = (id, count, diff) =>
-  API.post(`/ai/generate-mcq/${id}`, null, {
+  API.post(`/api/ai/generate-mcq/${id}`, null, {
     params: { count, difficulty: diff },
   });
 export const generateFlashcards = (id) =>
-  API.post(`/ai/generate-flashcards/${id}`);
+  API.post(`/api/ai/generate-flashcards/${id}`);
 
 // Quiz
-export const getQuiz = (materialId) => API.get(`/quiz/${materialId}`);
-export const submitQuiz = (data) => API.post("/quiz/submit", data);
+export const getQuiz = (materialId) => API.get(`/api/quiz/${materialId}`);
+export const submitQuiz = (data) => API.post("/api/quiz/submit", data);
 
 // Password Reset
-export const forgotPassword = (data) => API.post('/auth/forgot-password', data);
-export const resetPassword = (data) => API.post('/auth/reset-password', data);
+export const forgotPassword = (data) => API.post('/api/auth/forgot-password', data);
+export const resetPassword = (data) => API.post('/api/auth/reset-password', data);
