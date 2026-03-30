@@ -1,33 +1,32 @@
 package com.backend.quize.service.authService;
 
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
 
+    @Value("${brevo.api.key}")
+    private String brevoApiKey;
+
     @Value("${app.mail.from}")
     private String fromEmail;
 
-    private final JavaMailSender javaMailSender;
+    private final RestTemplate restTemplate;
 
     @Async
     public void sendWelcome(String toEmail, String name) {
         try {
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
-            helper.setFrom("StudyAI Team <" + fromEmail + ">");
-            helper.setTo(toEmail);
-            helper.setSubject("Welcome to StudyAI – Let's Start Learning! 🚀");
-
             String htmlContent = """
                     <!DOCTYPE html>
                     <html>
@@ -42,7 +41,7 @@ public class EmailService {
                                 <p>We're thrilled to have you join the <b>StudyAI</b> community!</p>
                     
                                 <div style="text-align: center; margin: 30px 0;">
-                                    <a href="http://localhost:3000" style="background-color: #4A90E2; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Go to Dashboard</a>
+                                    <a href="https://study-ai-lime-three.vercel.app" style="background-color: #4A90E2; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Go to Dashboard</a>
                                 </div>
                             </div>
                             <div style="background: #f9f9f9; padding: 20px; text-align: center; color: #999; font-size: 12px;">
@@ -53,10 +52,10 @@ public class EmailService {
                     </html>
                     """.formatted(name);
 
-            helper.setText(htmlContent, true);
-            javaMailSender.send(message);
+            sendBrevoEmail(toEmail, "Welcome to StudyAI – Let's Start Learning! 🚀", htmlContent);
 
         } catch (Exception e) {
+            System.err.println("Failed to send welcome email: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -64,15 +63,8 @@ public class EmailService {
     @Async
     public void sendResetOtp(String toEmail, String otp) {
         try {
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
-            helper.setFrom("StudyAI Team <" + fromEmail + ">");
-            helper.setTo(toEmail);
-            helper.setSubject(otp + " is your StudyAI Reset Code");
-
             String htmlContent = """
-                    <div style="font-family: Arial, sans-serif; text-align: caenter; padding: 20px; border: 1px solid #ddd; border-radius: 10px; max-width: 500px; margin: auto;">
+                    <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; border: 1px solid #ddd; border-radius: 10px; max-width: 500px; margin: auto;">
                         <h2 style="color: #4A90E2;">Password Reset Request</h2>
                         <p>Use the code below to reset your password. This code expires in 5 minutes.</p>
                         <div style="background: #f4f7f9; padding: 20px; font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #333; border-radius: 5px; margin: 20px 0;">
@@ -82,9 +74,39 @@ public class EmailService {
                     </div>
                     """.formatted(otp);
 
-            helper.setText(htmlContent, true);
-            javaMailSender.send(message);
+            sendBrevoEmail(toEmail, otp + " is your StudyAI Reset Code", htmlContent);
+
         } catch (Exception e) {
+            System.err.println("Failed to send OTP email: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void sendBrevoEmail(String toEmail, String subject, String htmlContent) {
+        try {
+            String url = "https://api.brevo.com/v3/smtp/email";
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("api-key", brevoApiKey);
+
+            Map<String, Object> body = Map.of(
+                    "sender", Map.of(
+                            "name", "StudyAI Team",
+                            "email", fromEmail
+                    ),
+                    "to", List.of(Map.of("email", toEmail)),
+                    "subject", subject,
+                    "htmlContent", htmlContent
+            );
+
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+            restTemplate.postForEntity(url, request, String.class);
+
+            System.out.println("Email sent successfully to: " + toEmail);
+
+        } catch (Exception e) {
+            System.err.println("Brevo API error: " + e.getMessage());
             e.printStackTrace();
         }
     }
