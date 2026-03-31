@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../component/Navbar';
 import {
-    BookOpen,
     ArrowRight,
     Upload,
     Brain,
@@ -11,29 +11,24 @@ import {
     Menu,
     X
 } from 'lucide-react';
-import { FaGithub, FaLinkedin, FaInstagram, FaTwitter, FaReact, FaNodeJs } from "react-icons/fa";
+import { FaGithub, FaReact, FaNodeJs } from "react-icons/fa";
 import { SiTailwindcss, SiMongodb, SiGooglecloud, SiSpringboot, SiDocker, SiVercel, SiRailway } from "react-icons/si";
-import ThemeToggle from '../component/ThemeToggle';
+import Footer from '../component/Footer';
+
+const navLinks = [
+    { label: "Features", href: "#features" },
+    { label: "How it Works", href: "#how-it-works" },
+    { label: "Tech Stack", href: "#tech-stack" }
+];
 
 export default function LandingPage() {
-    const currentYear = new Date().getFullYear();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
         if ('scrollRestoration' in window.history) {
             window.history.scrollRestoration = 'manual';
         }
-        const timer = setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 100);
-        return () => clearTimeout(timer);
-    }, []);
-
-    const scrollToTop = (e) => {
-        if (e) e.preventDefault();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        setIsMenuOpen(false);
-    };
+    }, []);
 
     const features = [
         {
@@ -76,50 +71,12 @@ export default function LandingPage() {
             <style>
                 {`
                     ::-webkit-scrollbar { display: none; }
-                    html { scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; }
+                    html { -ms-overflow-style: none; scrollbar-width: none; }
                     body { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.01em; }
                 `}
             </style>
 
-            <div className="absolute top-[-5%] left-[-10%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-200/40 dark:bg-purple-900/20 rounded-full blur-[80px] md:blur-[120px] -z-10 animate-pulse"></div>
-
-            {/* NAVBAR */}
-            <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-6xl z-50 px-4 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/40 dark:border-slate-800/40 rounded-2xl shadow-xl transition-all">
-                <div className="flex items-center justify-between">
-                    <button onClick={scrollToTop} className="flex items-center gap-2 group cursor-pointer bg-transparent border-none">
-                        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-1.5 md:p-2 rounded-xl shadow-lg">
-                            <BookOpen className="text-white" size={18} />
-                        </div>
-                        <span className="text-lg md:text-xl font-bold text-slate-800 dark:text-white">StudyAI</span>
-                    </button>
-
-                    <div className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
-                        <a href="#features" className="hover:text-indigo-600 transition">Features</a>
-                        <a href="#how-it-works" className="hover:text-indigo-600 transition">How it Works</a>
-                        <a href="#tech-stack" className="hover:text-indigo-600 transition">Tech Stack</a>
-                    </div>
-
-                    <div className="flex items-center gap-2 md:gap-4">
-                        <ThemeToggle />
-                        <div className="hidden sm:flex items-center gap-4">
-                            <Link to="/login" className="text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 transition">Login</Link>
-                            <Link to="/register" className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:scale-105 transition-all shadow-lg">Get Started</Link>
-                        </div>
-                        <button className="lg:hidden p-2 text-slate-600 dark:text-slate-300" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                        </button>
-                    </div>
-                </div>
-
-                {/* Mobile Dropdown Menu */}
-                {isMenuOpen && (
-                    <div className="lg:hidden pt-4 pb-2 flex flex-col gap-4 border-t border-slate-100 dark:border-slate-800 mt-3 animate-in fade-in slide-in-from-top-4">
-                        <a href="#features" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium py-2 dark:text-slate-300">Features</a>
-                        <a href="#how-it-works" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium py-2 dark:text-slate-300">How it Works</a>
-                        <a href="#tech-stack" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium py-2 dark:text-slate-300">Tech Stack</a>
-                    </div>
-                )}
-            </nav>
+            <Navbar links={navLinks} />
 
             {/* HERO */}
             <header className="pt-32 md:pt-48 pb-16 md:pb-24 px-6 text-center">
@@ -218,78 +175,7 @@ export default function LandingPage() {
             </section>
 
             {/* FOOTER */}
-            <footer className="mt-20 border-t border-white/50 dark:border-slate-800 bg-white/80 dark:bg-slate-950 backdrop-blur-2xl px-8 py-16 transition-colors duration-500">
-                <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
-
-                        {/* Brand Column */}
-                        <div className="col-span-1 md:col-span-1 flex flex-col gap-6">
-                            <button onClick={() => scrollToTop()} className="flex items-center gap-2 group w-fit">
-                                <div className="bg-gradient-to-br from-indigo-600 to-purple-600 p-2 rounded-xl shadow-lg group-hover:rotate-12 transition-all">
-                                    <BookOpen className="text-white" size={20} />
-                                </div>
-                                <span className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">StudyAI</span>
-                            </button>
-                            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed font-medium">
-                                Empowering students with AI-driven study tools to maximize productivity and learning outcomes.
-                            </p>
-                        </div>
-
-                        {/* Navigation Links */}
-                        <div className="flex flex-col gap-5">
-                            <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">Platform</h4>
-                            <ul className="flex flex-col gap-3">
-                                <li><Link to="/login" className="text-sm text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-semibold">Login</Link></li>
-                                <li><Link to="/register" className="text-sm text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-semibold">Register</Link></li>
-                                <li><a href="#features" className="text-sm text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-semibold">Features</a></li>
-                            </ul>
-                        </div>
-
-                        {/* Legal Links */}
-                        <div className="flex flex-col gap-5">
-                            <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">Legal</h4>
-                            <ul className="flex flex-col gap-3">
-                                <li><a href="#" className="text-sm text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-semibold">Privacy Policy</a></li>
-                                <li><a href="#" className="text-sm text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-semibold">Terms of Service</a></li>
-                                <li><a href="#" className="text-sm text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-semibold">Cookie Policy</a></li>
-                            </ul>
-                        </div>
-
-                        {/* Connect Section */}
-                        <div className="flex flex-col items-start md:items-end gap-6">
-                            <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">Connect</h4>
-                            <div className="flex items-center gap-4">
-                                {[
-                                    { icon: <FaGithub size={22} />, url: "https://github.com/ruturajjadhav07" },
-                                    { icon: <FaLinkedin size={22} />, url: "https://www.linkedin.com/in/ruturaj-jadhav-0a250821b/" },
-                                    { icon: <FaInstagram size={22} />, url: "https://instagram.com/ruturajj_07" },
-                                    { icon: <FaTwitter size={22} />, url: "https://twitter.com/spoidermon" }
-                                ].map((social, i) => (
-                                    <a
-                                        key={i}
-                                        href={social.url}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 transition-all duration-300"
-                                    >
-                                        {social.icon}
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Bottom Bar */}
-                    <div className="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-center">
-                        <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
-                            &copy; {currentYear} Built with ❤️ by <span className="font-bold text-indigo-600">Ruturaj</span>
-                        </p>
-                        <p className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">
-                            Made for students, by students.
-                        </p>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 }
