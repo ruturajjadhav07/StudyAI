@@ -6,6 +6,10 @@ import ThemeToggle from './ThemeToggle';
 const Navbar = ({ links = [], showBackHome = false, showToggle = true }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    const handleLinkClick = () => {
+        setIsMenuOpen(false);
+    };
+
     return (
         <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-6xl z-50 px-4 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/40 dark:border-slate-800/40 rounded-2xl shadow-xl transition-all">
             <div className="flex items-center justify-between">
@@ -28,7 +32,7 @@ const Navbar = ({ links = [], showBackHome = false, showToggle = true }) => {
                 <div className="flex items-center gap-2 md:gap-4">
                     {/* Toggle */}
                     {showToggle && <ThemeToggle />}
-                    
+
                     {showBackHome && (
                         <Link to="/" className="flex items-center gap-2 text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition no-underline">
                             <ArrowLeft size={16} /> <span className="hidden sm:inline">Back Home</span>
@@ -41,7 +45,7 @@ const Navbar = ({ links = [], showBackHome = false, showToggle = true }) => {
                             <Link to="/register" className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg no-underline">Get Started</Link>
                         </div>
                     )}
-                    
+
                     {links.length > 0 && (
                         <button className="lg:hidden p-2 text-slate-600 dark:text-slate-300 bg-transparent border-none" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -49,6 +53,27 @@ const Navbar = ({ links = [], showBackHome = false, showToggle = true }) => {
                     )}
                 </div>
             </div>
+
+            {/* Mobile Menu view  */}
+            {isMenuOpen && links.length > 0 && (
+                <div className="lg:hidden absolute top-full left-0 w-full mt-2 p-4 bg-white dark:bg-slate-900 border border-white/40 dark:border-slate-800/40 rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div className="flex flex-col gap-2">
+                        {links.map((link, index) => (
+                            <a
+                                key={index}
+                                href={link.href}
+                                onClick={handleLinkClick}
+                                className="px-4 py-3 text-base font-bold text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 rounded-xl transition no-underline"
+                            >
+                                {link.label}
+                            </a>
+                        ))}
+                        <hr className="border-slate-100 dark:border-slate-800 my-1" />
+                        <Link to="/login" onClick={handleLinkClick} className="px-4 py-3 text-base font-bold text-slate-700 dark:text-slate-300 no-underline hover:text-indigo-600 transition">Login</Link>
+                        <Link to="/register" onClick={handleLinkClick} className="px-4 py-3 text-base font-bold text-slate-700 dark:text-slate-300 no-underline hover:text-indigo-600 transition">Signup</Link>
+                    </div>
+                </div>
+            )}
         </nav>
     );
 };

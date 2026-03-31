@@ -42,7 +42,7 @@ export default function TermsOfService() {
             {/* NAVBAR */}
             <Navbar links={[]} showBackHome={true} showToggle={false} />
 
-            <header className="pt-40 md:pt-48 pb-16 px-6 text-center">
+            <header className="pt-40 md:pt-42 pb-16 px-6 text-center">
                 <div className="max-w-3xl mx-auto">
                     <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-widest mb-6">
                         <Sparkles size={13} /> Usage Agreement
