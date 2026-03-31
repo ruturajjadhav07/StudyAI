@@ -68,14 +68,8 @@ export default function LandingPage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 selection:bg-indigo-100 dark:selection:bg-indigo-900 overflow-x-hidden relative transition-colors duration-500 font-sans">
-            <style>
-                {`
-                    ::-webkit-scrollbar { display: none; }
-                    html { -ms-overflow-style: none; scrollbar-width: none; }
-                    body { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.01em; }
-                `}
-            </style>
 
+            {/* NAVBAR */}
             <Navbar links={navLinks} />
 
             {/* HERO */}

@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer base {
+  html, body {
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    background-color: white;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: -0.01em;
+    @apply transition-colors duration-300;
+  }
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
@@ -29,10 +52,4 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-}
-
-body {
-  @apply transition-colors duration-300;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  letter-spacing: -0.01em;
 }

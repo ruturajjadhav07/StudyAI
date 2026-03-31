@@ -29,17 +29,11 @@ export default function PrivacyPolicy() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300 selection:bg-indigo-100 no-scrollbar">
-      <style>
-        {`
-          ::-webkit-scrollbar { display: none; }
-          html { -ms-overflow-style: none; scrollbar-width: none; }
-          body { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.01em; }
-        `}
-      </style>
 
       <div className="fixed top-[-5%] left-[-10%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-200/20 dark:bg-purple-900/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
       <div className="fixed bottom-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-indigo-200/20 dark:bg-indigo-900/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
 
+      {/* NAVBAR */}
       <Navbar links={[]} showBackHome={true} showToggle={false} />
 
       <header className="pt-40 md:pt-42 pb-16 px-6 text-center">

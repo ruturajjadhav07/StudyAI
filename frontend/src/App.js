@@ -15,7 +15,7 @@ import Results from './pages/Results';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import PrivacyPolicy from './pages/PrivacyPolicy';
-
+import TermsOfService from './pages/TermsOfService';
 // Route guard
 
 const PrivateRoute = ({ children }) => {
@@ -52,6 +52,7 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/terms" element={<TermsOfService />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
