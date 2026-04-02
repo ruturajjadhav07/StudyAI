@@ -73,7 +73,7 @@ export default function LandingPage() {
             <Navbar links={navLinks} />
 
             {/* HERO */}
-            <header className="pt-32 md:pt-48 pb-16 md:pb-24 px-6 text-center">
+            <header className="pt-32 md:pt-44 pb-16 md:pb-24 px-6 text-center">
                 <div className="max-w-4xl mx-auto">
                     <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[10px] md:text-xs font-bold uppercase tracking-widest mb-6">
                         <Sparkles size={14} /> The Future of Learning is Here
