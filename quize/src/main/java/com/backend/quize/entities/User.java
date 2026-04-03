@@ -47,8 +47,12 @@ public class User {
     private LocalDateTime createdAt;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyMaterial> studyMaterials;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuizAttempt> quizAttempts;
 
     private String resetOtp;
     private Long resetOtpExpireAt;

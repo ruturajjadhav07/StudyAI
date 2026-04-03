@@ -57,16 +57,20 @@ public class StudyMaterial {
     private LocalDateTime createdAt;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "studyMaterial", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "studyMaterial", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Summary summary;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "studyMaterial", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "studyMaterial", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Question> questions;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "studyMaterial", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "studyMaterial", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Flashcard> flashcards;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "studyMaterial", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuizAttempt> quizAttempts;
 
     public enum SourceType {TEXT, PDF, TOPIC}
 

@@ -59,4 +59,10 @@ export const submitQuiz = (data) => api.post("/api/quiz/submit", data);
 export const forgotPassword = (data) => api.post('/api/auth/forgot-password', data);
 export const resetPassword = (data) => api.post('/api/auth/reset-password', data);
 
+// Delete account
+export const deleteAccountApi = (data) => api.delete('/api/auth/delete-account', { data });
+
+// Change password
+export const changePasswordApi = (data) => api.post('/api/auth/change-password', data);
+
 export default api;

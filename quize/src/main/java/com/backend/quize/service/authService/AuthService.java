@@ -1,5 +1,6 @@
 package com.backend.quize.service.authService;
 
+import com.backend.quize.dtos.user.ChangePasswordRequest;
 import com.backend.quize.dtos.user.LoginRequest;
 import com.backend.quize.dtos.user.RegisterRequest;
 import com.backend.quize.dtos.user.AuthResponse;
@@ -7,12 +8,15 @@ import com.backend.quize.entities.User;
 import com.backend.quize.repository.UserRepository;
 import com.backend.quize.security.JwtTokenProvider;
 import com.backend.quize.security.UserDetailsImpl;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -91,6 +95,7 @@ public class AuthService {
         emailService.sendResetOtp(user.getEmail(), otp);
     }
 
+    @Transactional
     public void resetPassword(String email, String otp, String newPassword) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -108,5 +113,76 @@ public class AuthService {
         user.setResetOtp(null);
         user.setResetOtpExpireAt(0L);
         userRepository.save(user);
+
+        String userEmail = user.getEmail();
+        String userName = user.getName();
+
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    emailService.sendPasswordChangedEmail(userEmail, userName);
+                }
+            });
+        } else {
+            emailService.sendPasswordChangedEmail(userEmail, userName);
+        }
+    }
+
+
+    @Transactional
+    public void changePassword(long userId, ChangePasswordRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new RuntimeException("Old password does not match!");
+        }
+
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            throw new RuntimeException("New password cannot be the same as your current password!");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        String email = user.getEmail();
+        String name = user.getName();
+
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    emailService.sendPasswordChangedEmail(email, name);
+                }
+            });
+        } else {
+            emailService.sendPasswordChangedEmail(email, name);
+        }
+    }
+
+    @Transactional
+    public void deleteAccount(long userId, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Incorrect password. Account deletion aborted");
+        }
+
+        String userEmail = user.getEmail();
+        String userName = user.getName();
+
+        userRepository.delete(user);
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    emailService.sendAccountDeletionEmail(userEmail, userName);
+                }
+            });
+        } else {
+            emailService.sendAccountDeletionEmail(userEmail, userName);
+        }
     }
 }

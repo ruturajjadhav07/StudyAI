@@ -110,4 +110,44 @@ public class EmailService {
             e.printStackTrace();
         }
     }
+
+    @Async
+    public void sendPasswordChangedEmail(String toEmail, String name) {
+        try {
+            String htmlContent = """
+                    <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 500px; margin: auto;">
+                        <h2 style="color: #4A90E2;">Security Alert: Password Changed</h2>
+                        <p>Hi %s,</p>
+                        <p>This is a confirmation that the password for your <b>StudyAI</b> account was recently changed.</p>
+                        <p>If you performed this change, you can safely ignore this email.</p>
+                        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                        <p style="font-size: 13px; color: #e11d48;"><b>If you did not change your password</b>, please contact our support team immediately to secure your account.</p>
+                    </div>
+                    """.formatted(name);
+
+            sendBrevoEmail(toEmail, "Security Alert: Your StudyAI password was changed", htmlContent);
+        } catch (Exception e) {
+            System.err.println("Failed to send password change email: " + e.getMessage());
+        }
+    }
+
+    @Async
+    public void sendAccountDeletionEmail(String toEmail, String name) {
+        try {
+            String htmlContent = """
+                    <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 500px; margin: auto;">
+                        <h2 style="color: #e11d48;">Account Deleted Successfully</h2>
+                        <p>Hi %s,</p>
+                        <p>This email confirms that your <b>StudyAI</b> account has been permanently deleted as per your request.</p>
+                        <p>All your uploaded notes, summaries, and flashcards have been removed from our servers.</p>
+                        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                        <p style="font-size: 13px; color: #666;">We're sorry to see you go! You are welcome to join us again anytime.</p>
+                    </div>
+                    """.formatted(name);
+
+            sendBrevoEmail(toEmail, "StudyAI Account Closed", htmlContent);
+        } catch (Exception e) {
+            System.err.println("Failed to send deletion email: " + e.getMessage());
+        }
+    }
 }
