@@ -1,11 +1,11 @@
 package com.backend.quize.controllers;
 
-import com.backend.quize.dtos.quize.QuizSubmitRequest;
-import com.backend.quize.dtos.ApiResponse;
-import com.backend.quize.dtos.quize.QuizResultResponse;
-import com.backend.quize.entities.Question;
+import com.backend.quize.dto.QuizSubmitRequest;
+import com.backend.quize.dto.ApiResponse;
+import com.backend.quize.dto.QuizResultResponse;
+import com.backend.quize.entity.Question;
 import com.backend.quize.security.UserDetailsImpl;
-import com.backend.quize.service.quizeService.QuizService;
+import com.backend.quize.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

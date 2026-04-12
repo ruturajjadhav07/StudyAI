@@ -2,21 +2,21 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-import Landing from './pages/Landing';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import Upload from './pages/Upload';
-import Study from './pages/Study';
-import Quiz from './pages/Quiz';
-import Results from './pages/Results';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsOfService from './pages/TermsOfService';
-import FAQs from './pages/FAQ\'s';
+import Landing from './pages/static/Landing';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import Dashboard from './pages/app/Dashboard';
+import Upload from './pages/app/Upload';
+import Study from './pages/app/Study';
+import Quiz from './pages/app/Quiz';
+import Results from './pages/app/Results';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
+import PrivacyPolicy from './pages/static/PrivacyPolicy';
+import TermsOfService from './pages/static/TermsOfService';
+import FAQs from './pages/static/FAQ\'s';
 
 // Route guard
 

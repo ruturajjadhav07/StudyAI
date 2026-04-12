@@ -1,10 +1,10 @@
 package com.backend.quize.controllers;
 
-import com.backend.quize.dtos.studyMaterial.StudyMaterialRequest;
-import com.backend.quize.dtos.ApiResponse;
-import com.backend.quize.entities.StudyMaterial;
+import com.backend.quize.dto.StudyMaterialRequest;
+import com.backend.quize.dto.ApiResponse;
+import com.backend.quize.entity.StudyMaterial;
 import com.backend.quize.security.UserDetailsImpl;
-import com.backend.quize.service.studyMaterial.StudyMaterialService;
+import com.backend.quize.service.StudyMaterialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

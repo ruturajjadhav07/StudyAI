@@ -1,6 +1,6 @@
 package com.backend.quize.security;
 
-import com.backend.quize.entities.User;
+import com.backend.quize.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,6 +1,6 @@
 package com.backend.quize.repository;
 
-import com.backend.quize.entities.Summary;
+import com.backend.quize.entity.Summary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

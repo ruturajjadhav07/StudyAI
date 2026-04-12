@@ -1,9 +1,9 @@
 package com.backend.quize.controllers;
 
-import com.backend.quize.dtos.user.*;
-import com.backend.quize.dtos.ApiResponse;
+import com.backend.quize.dto.*;
+import com.backend.quize.dto.ApiResponse;
 import com.backend.quize.security.UserDetailsImpl;
-import com.backend.quize.service.authService.AuthService;
+import com.backend.quize.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

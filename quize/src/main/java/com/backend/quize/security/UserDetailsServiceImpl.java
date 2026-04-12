@@ -1,7 +1,7 @@
 package com.backend.quize.security;
 
 
-import com.backend.quize.entities.User;
+import com.backend.quize.entity.User;
 import com.backend.quize.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.*;

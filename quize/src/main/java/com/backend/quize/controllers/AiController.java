@@ -1,12 +1,12 @@
 package com.backend.quize.controllers;
 
 
-import com.backend.quize.dtos.ApiResponse;
-import com.backend.quize.entities.*;
+import com.backend.quize.dto.ApiResponse;
+import com.backend.quize.entity.*;
 import com.backend.quize.repository.FlashcardRepository;
 import com.backend.quize.repository.SummaryRepository;
-import com.backend.quize.service.aiService.AiService;
-import com.backend.quize.service.studyMaterial.StudyMaterialService;
+import com.backend.quize.service.AiService;
+import com.backend.quize.service.StudyMaterialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

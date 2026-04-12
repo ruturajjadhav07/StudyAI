@@ -3,7 +3,7 @@ package com.backend.quize.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.backend.quize.entities.Flashcard;
+import com.backend.quize.entity.Flashcard;
 
 import java.util.List;
 
