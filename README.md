@@ -63,20 +63,6 @@ npm run dev
 
 ---
 
-## 📂 Project Structure
-
-```plaintext
-studyai/
-├── frontend/                # React source code
-│   ├── src/
-│   │   ├── component/       # Reusable UI components
-│   │   └── pages/           # Landing, Login, Register
-├── quize/                   # Spring Boot backend (Core Logic)
-│   ├── src/main/java/       # Controllers, Services, Entities
-│   └── src/main/resources/  # Configuration & API Keys
-└── README.md
-```
-
 ---
 
 ## 🤝 Contributing
